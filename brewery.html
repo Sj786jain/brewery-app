@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brewery Details</title>
+  <style>
+    body {
+      background-color: rgb(195, 249, 231);
+      font-family: 'Arial', sans-serif;
+      margin: 20px;
+    }
+
+    #brewery-details {
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    p {
+      margin: 5px 0;
+    }
+
+    a {
+      color: #3b62ff;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    #review-section {
+      border-top: 1px solid #ddd;
+      padding-top: 20px;
+      margin-top: 20px;
+    }
+
+    h2 {
+      color: #333;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #555;
+    }
+
+    input[type="number"],
+    textarea {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      background-color: rgb(251, 243, 232);
+    }
+
+    button {
+      background-color: #3b62ff;
+      color: #fff;
+      padding: 10px;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0033ff;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="brewery-details"></div>
+
+  <div id="review-section">
+    <h2>Add Review</h2>
+    <label for="rating">Rating (1-5):</label>
+    <input type="number" id="rating" min="1" max="5" required>
+    <br>
+    <label for="description">Description:</label>
+    <textarea id="description" rows="4" required></textarea>
+    <br>
+    <button onclick="addReview()">Submit Review</button>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const urlParams = new URLSearchParams(window.location.search);
+      const breweryId = urlParams.get('id');
+
+      // Fetch details for the specific brewery
+      fetch(`https://api.openbrewerydb.org/breweries/${breweryId}`)
+        .then(response => response.json())
+        .then(data => {
+          displayBreweryDetails(data);
+        })
+        .catch(error => console.error('Error fetching brewery details:', error));
+    });
+
+    function displayBreweryDetails(brewery) {
+      var breweryDetailsContainer = document.getElementById('brewery-details');
+      breweryDetailsContainer.innerHTML = `
+    <h1>${brewery.name}</h1>
+    <p><strong>Name:</strong> ${brewery.name}</p>
+    <p><strong>Address:</strong> ${brewery.street}</p>
+    <p><strong>Phone number:</strong> ${brewery.phone}</p>
+    <p><strong>Web site URL:</strong> <a href="${brewery.website_url}" target="_blank">${brewery.website_url}</a></p>
+    <p><strong>Current rating:</strong> ${brewery.rating ? brewery.rating : 'N/A'}</p>
+    <p><strong>State:</strong> ${brewery.state}</p>
+    <p><strong>City:</strong> ${brewery.city}</p>
+  `;
+    }
+
+    function addReview() {
+      const rating = document.getElementById('rating').value;
+      const description = document.getElementById('description').value;
+
+      if (rating < 1 || rating > 5) {
+        alert('Please enter a valid rating between 1 and 5.');
+        return;
+      }
+
+      alert(`Review submitted!\nRating: ${rating}\nDescription: ${description}`);
+
+    }
+
+  </script>
+</body>
+
+</html>

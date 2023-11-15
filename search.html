@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="search.css">
+  <title>Brewery Search</title>
+
+  <style>
+    body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+  }
+  
+  .search-container {
+    width: 60%;
+    margin: 50px auto;
+    background-color: rgb(152, 215, 240);
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgb(156, 218, 243);
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  label {
+    margin-bottom: 8px;
+  }
+  
+  input,
+  select {
+    padding: 13px;
+    margin-bottom: 17px;
+    border: 1px solid #e17e7e;
+    border-radius: 4px;
+  }
+  
+  button {
+    background-color: #cc834b;
+    color: white;
+    padding: 13px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #c6671e;
+  }
+  
+  #results {
+    margin-top: 20px;
+  }
+  </style>
+
+</head>
+<body>
+  <div class="search-container">
+    <h2>Brewery Search</h2>
+    <form id="searchForm">
+      <label for="city">Search by City:</label>
+      <input type="text" id="city" name="city" placeholder="Enter city">
+
+      <label for="name">Search by Name:</label>
+      <input type="text" id="name" name="name" placeholder="Enter name">
+
+      <label for="type">Search by Type:</label>
+      <select id="type" name="type">
+        <option value="">Select type</option>
+        <option value="micro">Microbrewery</option>
+        <option value="nano">Nanobrewery</option>
+        <option value="brewpub">Brewpub</option>
+      </select>
+
+      <button type="button" onclick="searchBreweries()">Search</button>
+    </form>
+
+    <div id="results"></div>
+  </div>
+
+  <script>
+    function searchBreweries() {
+  var city = document.getElementById('city').value;
+  var name = document.getElementById('name').value;
+  var type = document.getElementById('type').value;
+
+  var apiUrl = 'https://api.openbrewerydb.org/breweries?';
+
+  if (city) apiUrl += 'by_city=' + city + '&';
+  if (name) apiUrl += 'by_name=' + name + '&';
+  if (type) apiUrl += 'by_type=' + type;
+
+  fetch(apiUrl)
+    .then(response => response.json())
+    .then(data => {
+      displayResults(data);
+    })
+    .catch(error => console.error('Error fetching data:', error));
+}
+
+function displayResults(data) {
+  var resultsContainer = document.getElementById('results');
+  resultsContainer.innerHTML = ''; 
+
+  if (data.length === 0) {
+    resultsContainer.innerHTML = 'No results found.';
+    return;
+  }
+
+  data.forEach((brewery, index) => {
+    var breweryCard = document.createElement('div');
+    breweryCard.classList.add('brewery-card');
+    breweryCard.innerHTML = `
+      <h3>${brewery.name}</h3>
+      <p><strong>Name:</strong> ${brewery.name}</p>
+      <p><strong>Address:</strong> ${brewery.street}</p>
+      <p><strong>Phone number:</strong> ${brewery.phone}</p>
+      <p><strong>Web site URL:</strong> <a href="${brewery.website_url}" target="_blank">${brewery.website_url}</a></p>
+      <p><strong>Current rating:</strong> ${brewery.rating ? brewery.rating : 'N/A'}</p>
+      <p><strong>State:</strong> ${brewery.state}</p>
+      <p><strong>City:</strong> ${brewery.city}</p>
+      <button onclick="redirectToBreweryPage('${brewery.id}')">View Details</button>
+    `;
+
+    breweryCard.style.marginBottom = '20px';
+
+    resultsContainer.appendChild(breweryCard);
+  });
+}
+
+function redirectToBreweryPage(breweryId) {
+  window.location.href = `brewery.html?id=${breweryId}`;
+}
+  </script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Login Page</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: rgb(230, 236, 240);
+            font-family: sans-serif;
+        }
+
+        .loginbox {
+            width: 350px;
+            height: 420px;
+            background: rgb(239, 107, 200);
+            color: white;
+            top: 50%;
+            left: 50%;
+            position: absolute;
+            transform: translate(-50%, -50%);
+            box-sizing: border-box;
+            padding: 60px 30px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgb(216, 112, 190);
+        }
+
+        h1 {
+            margin: 0;
+            padding: 0 0 20 px;
+            text-align: center;
+            font-size: 22px;
+        }
+
+        .loginbox p {
+            margin: 0;
+            padding: 0;
+            font-weight: bold;
+        }
+
+        .loginbox input {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .loginbox input[type="text"],
+        input[type="password"] {
+            border: none;
+            border-bottom: 1px solid white;
+            background: transparent;
+            outline: none;
+            height: 40px;
+            color: white;
+            font-size: 18px;
+        }
+
+        .loginbox input[type="submit"] {
+            border: none;
+            outline: none;
+            height: 40px;
+            background: rgb(72, 190, 172);
+            color: white;
+            font-size: 18px;
+            border-radius: 20px;
+        }
+
+        .loginbox input[type="submit"]:hover {
+            cursor: pointer;
+            background: rgb(8, 112, 97);
+            color: #000;
+        }
+
+        .loginbox a {
+            text-decoration: none;
+            font-size: 12px;
+            line-height: 20px;
+            color: rgb(181, 226, 244);
+        }
+
+        .loginbox a:hover {
+            color: #ffc107;
+        }
+    </style>
+
+<body>
+    <div class="loginbox">
+        <h1>Login Here</h1>
+        <form onsubmit="login(); return false;">
+            <p>Username</p>
+            <input type="text" id="username" placeholder="Enter Username" required>
+            <p>Password</p>
+            <input type="password" id="password" placeholder="Enter Password" required>
+            <input type="submit" value="Login"><br>
+            <a href="index.html">Don't have an account?</a>
+
+        </form>
+    </div>
+
+    <script>
+        function login() {
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+            if (username === 'demo' && password === 'password') {
+                alert('Login successful!');
+                window.location.href = 'search.html';
+            } else {
+                alert('Invalid username or password. Please try again.');
+            }
+        }
+    </script>
+</body>
+</head>
+
+</html>
